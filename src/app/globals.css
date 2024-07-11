@@ -2,32 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* globals.css */
+::-webkit-scrollbar {
+    width: 8px;
+    border-radius: 20px;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  
+  ::-webkit-scrollbar-track {
+   
   }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 20px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  html{
+    overflow-x: hidden;
+  }
+  dialog {
+    width: 80%; /* Adjust width as per your design */
+    max-width: 400px; /* Example of setting a maximum width */
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
+.bgImage {
+  background-image: url('/images/back.jpeg'); /* Replace with your image URL */
+  background-size: cover; /* Ensures the background image covers the entire element */
+  background-position: center; /* Centers the background image */
+  background-repeat: no-repeat; /* Prevents the background image from repeating */
+  overflow: auto; /* Ensures that overflowed content can be scrolled */
+}
+
+.carouselContainer {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  border: 2px solid red; 
+  height: 10vh; /* Adjust height as needed */
+  width: 60%; /* Adjust width as needed */
+}
+
+.carouselTrack {
+  display: flex;
+  position: absolute;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  width: calc(200%); /* Adjust width to accommodate all carousel items */
+  transition: transform 1s ease; /* Smooth transition when changing transform */
+}
+
+.carouselCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px; /* Adjust width as needed */
+  height: 200px; /* Adjust height as needed */
+  transform-origin: center;
+  transition: transform 0.3s ease;
+  border-radius: 20%;
+  background: rgb(41, 40, 40);
+}
+
+.carouselCard:hover {
+  transform: scale(0.9);
+  box-shadow: 5px 5px 8px rgba(222, 222, 222, 0.362),
+    10px 10px 8px rgba(152, 133, 133, 0.392),
+    15px 15px 8px rgba(139, 154, 139, 0.303);
+}
+

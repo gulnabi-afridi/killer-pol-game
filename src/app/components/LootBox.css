@@ -1,0 +1,64 @@
+
+.grid-container {
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loot-track-container {
+    width: 40rem;
+    margin: 10px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.loot-track {
+    margin-left: 0;
+    transition: 5s cubic-bezier(0.12, 0.8, 0.38, 1);
+    white-space: nowrap;
+    font-size: 0;
+   
+    height: 70px;
+}
+
+.win-line {
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    position: absolute;
+    border-right: 1px solid red;
+    border-left: 1px solid red;
+    z-index: 1;
+    box-shadow: 0px 0px 1px 0px #000;
+}
+
+.loot {
+    /* background: #EEE; */
+    width: 10rem;
+    height: 10rem;
+   
+    display: inline-flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: #FFF;
+    align-items: center;
+    text-align: left;
+}
+
+.loot-name {
+    width: 100%;
+    font-size: 20px;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    text-align: center;
+}
+
+.loot:last-child {
+    border: none;
+}
+
+.button {
+    margin: 0.5rem;
+}
