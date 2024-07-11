@@ -62,45 +62,6 @@ const Home = () => {
     }, 2000);
   };
 
-  const addmiss = (id) => {
-    const updatedPlayers = [...players];
-    const playerIndex = updatedPlayers.findIndex((player) => player.id === id);
-    if (updatedPlayers && updatedPlayers[playerIndex]?.lives != 0)
-      setMessage(updatedPlayers[playerIndex].player_name + " Missed");
-    else
-      setMessage(
-        updatedPlayers[playerIndex].player_name + " has no life.Spin the bar"
-      );
-    if (playerIndex === -1) return;
-
-    if (updatedPlayers[playerIndex] && updatedPlayers[playerIndex]?.lives > 0) {
-      updatedPlayers[playerIndex].miss += 1;
-      updatedPlayers[playerIndex].lives -= 1;
-      if (
-        updatedPlayers[playerIndex] &&
-        updatedPlayers[playerIndex].black != 0
-      ) {
-        updatedPlayers[playerIndex].black -= 1;
-      }
-    }
-
-    setPlayers(updatedPlayers);
-    setSelectedPlayer(updatedPlayers[playerIndex]);
-
-    const updatedsortedPlayers = [...sortedArray];
-    const sortedPlayerIndex = updatedsortedPlayers.findIndex(
-      (player) => player.id === id
-    );
-    if (sortedPlayerIndex !== -1) {
-      updatedsortedPlayers[sortedPlayerIndex] = updatedPlayers[playerIndex];
-    }
-    setSortArray(sortPlayersByHits(updatedsortedPlayers));
-    setShowOverlay(true);
-    setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-  };
-
   const startGame = () => {
     if (moneyPaid == true && players.length >= 1) {
       setPlaymode(true);
@@ -290,6 +251,54 @@ const Home = () => {
     }, 2000);
   };
 
+  const addmiss = (id) => {
+    const updatedPlayers = [...players];
+    const playerIndex = updatedPlayers.findIndex((player) => player.id === id);
+
+    if (playerIndex === -1) return;
+
+    if (
+      updatedPlayers[playerIndex] &&
+      updatedPlayers[playerIndex].lives !== 0
+    ) {
+      setMessage(updatedPlayers[playerIndex].player_name + " Missed");
+    } else {
+      setMessage(
+        updatedPlayers[playerIndex].player_name + " has no life. Spin the bar"
+      );
+    }
+
+    if (updatedPlayers[playerIndex]?.lives > 0) {
+      updatedPlayers[playerIndex].miss += 1;
+      updatedPlayers[playerIndex].lives -= 1;
+      if (updatedPlayers[playerIndex].black !== 0) {
+        updatedPlayers[playerIndex].black -= 1;
+      }
+    }
+
+    setPlayers(updatedPlayers);
+    setSelectedPlayer(updatedPlayers[playerIndex]);
+
+    const updatedsortedPlayers = [...sortedArray];
+    const sortedPlayerIndex = updatedsortedPlayers.findIndex(
+      (player) => player.id === id
+    );
+    if (sortedPlayerIndex !== -1) {
+      updatedsortedPlayers[sortedPlayerIndex] = updatedPlayers[playerIndex];
+    }
+    setSortArray(sortPlayersByHits(updatedsortedPlayers));
+    setShowOverlay(true);
+
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
+
+    // Ensure the animation is reset and triggered
+    setTimeout(() => {
+      reset();
+    }, 2000);
+  };
+
   return (
     <div className="relative bgImage ">
       {showOverlay && (
@@ -378,7 +387,7 @@ const Home = () => {
                     <div>
                       {rules.map((rule, index) => (
                         <h1
-                         key={index}
+                          key={index}
                           className={`text-[18px] ${
                             index % 2 ? "bg-[#00CAFF36]" : ""
                           } font-semibold leading-[32px]`}
@@ -602,15 +611,17 @@ const Home = () => {
                     </button>
                   </div>
                 )}
-                <button
-                  onClick={() => {
-                    openLootBox();
-                    reset();
-                  }}
-                  className="text-[26px] w-[200px] top-[110px] font-semibold h-[70px] bg-[#00CAFF36] rounded-lg absolute right-0 text-white"
-                >
-                  Next Player{" "}
-                </button>
+                {selectedPlayer && (
+                  <button
+                    onClick={() => {
+                      openLootBox();
+                      reset();
+                    }}
+                    className="text-[26px] w-[200px] top-[110px] font-semibold h-[70px] bg-[#00CAFF36] rounded-lg absolute right-0 text-white"
+                  >
+                    Next Player{" "}
+                  </button>
+                )}
               </div>
             )}
 
