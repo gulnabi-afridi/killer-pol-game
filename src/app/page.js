@@ -212,12 +212,6 @@ const Home = () => {
     // Get the removed player
     const removedPlayer = updatedPlayers.splice(playerIndex, 1)[0];
 
-    // Update the sorted array with the removed player
-    const updatedSortedArray = [...sortedArray];
-    if (!updatedSortedArray.some((player) => player.id === removedPlayer.id)) {
-      updatedSortedArray.push(removedPlayer);
-    }
-
     setMessage(removedPlayer.player_name + " Potted");
     setShowOverlay(true);
 
@@ -225,14 +219,22 @@ const Home = () => {
       setShowOverlay(false);
     }, 2000);
 
+    // Update the state with the new players array
     setPlayers(updatedPlayers);
-    setSortArray(sortPlayersByHits(updatedSortedArray));
 
-    // Call the REST function outside of the state update
-    // setTimeout(() => {
-    //   callAnimation();
-    // }, 2000);
+    // Update the loot box and select the next player
+    if (updatedPlayers.length > 0) {
+      
+    } else {
+      setSelectedPlayer(null);
+    }
   };
+
+  useEffect(() => {
+    if (players.length === 0) {
+      setSelectedPlayer(null);
+    }
+  }, [players]);
 
   const addmiss = (id) => {
     const updatedPlayers = [...players];
@@ -277,9 +279,9 @@ const Home = () => {
     }, 2000);
 
     // Ensure the animation is reset and triggered
-    setTimeout(() => {
-      reset();
-    }, 2000);
+    // setTimeout(() => {
+    //   reset();
+    // }, 2000);
   };
 
   return (
@@ -596,6 +598,7 @@ const Home = () => {
                 )}
                 {selectedPlayer && (
                   <button
+                    id="nextPlayerButton"
                     onClick={() => {
                       openLootBox();
                       reset();
