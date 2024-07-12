@@ -86,6 +86,7 @@ const Home = () => {
 
     setTimeout(openLootBox);
   };
+
   const openLootBox = () => {
     if (document.querySelector(".loot-track"))
       document.querySelector(".loot-track").style.transition =
@@ -199,56 +200,46 @@ const Home = () => {
   };
 
   const addhit = (id) => {
-    let updatedPlayers = [...players];
+    setPlayers((prevPlayers) => {
+      const updatedPlayers = [...prevPlayers];
 
-    const playerIndex = updatedPlayers.findIndex((player) => player.id === id);
-
-    if (updatedPlayers[playerIndex] && updatedPlayers[playerIndex].lives !== 0)
-      setMessage(updatedPlayers[playerIndex].player_name + " Potted");
-    else
-      setMessage(
-        updatedPlayers[playerIndex].player_name + " Removed from List"
+      const playerIndex = updatedPlayers.findIndex(
+        (player) => player.id === id
       );
 
-    if (playerIndex === -1) return;
+      if (playerIndex === -1) {
+        console.log("Player not found, returning previous players array.");
+        return prevPlayers;
+      }
 
-    if (updatedPlayers[playerIndex].lives > 0) {
-      updatedPlayers[playerIndex].hit += 1;
-    }
+      // Get the removed player
+      const removedPlayer = updatedPlayers.splice(playerIndex, 1)[0];
+      console.log(`Removed player: ${removedPlayer.player_name}`);
 
-    const updatedsortedPlayers = [...sortedArray];
-    const sortedPlayerIndex = updatedsortedPlayers.findIndex(
-      (player) => player.id === id
-    );
-    if (sortedPlayerIndex !== -1) {
-      updatedsortedPlayers[sortedPlayerIndex] = updatedPlayers[playerIndex];
-    }
+      // Update the sorted array with the removed player
+      setSortArray((prevSortedArray) => {
+        // Check if the player is already in the sorted array
+        if (prevSortedArray.some((player) => player.id === removedPlayer.id)) {
+          console.log(
+            `Player ${removedPlayer.player_name} already in sorted array.`
+          );
+          return prevSortedArray;
+        }
 
-    // if(updatedPlayers[playerIndex].lives!==0)
-    // {
-    //     setSelectedPlayer(updatedPlayers[playerIndex]);
-    // }
-    // console.log("My arraya after splice is ",updatedPlayers,"player index",playerIndex,"he",updatedPlayers[playerIndex].lives)
+        const updatedSortedArray = [...prevSortedArray, removedPlayer];
+        console.log("Updated sorted array: ", updatedSortedArray);
+        return sortPlayersByHits(updatedSortedArray);
+      });
 
-    if (updatedPlayers[playerIndex].lives === 0) {
-      console.log("Inside spilce");
-      updatedPlayers.splice(playerIndex, 1);
-      console.log("After splice ", updatedPlayers);
-    }
+      setMessage(prevPlayers[playerIndex].player_name + " Potted");
+      setShowOverlay(true);
 
-    setPlayers((players) => players.filter((player) => player.lives !== 0));
+      setTimeout(() => {
+        setShowOverlay(false);
+      }, 2000);
 
-    setSortArray(sortPlayersByHits(updatedsortedPlayers));
-
-    setShowOverlay(true);
-    setTimeout(() => {
-      setShowOverlay(false);
-    }, 2000);
-
-    console.log("players", players);
-    setTimeout(() => {
-      reset();
-    }, 2000);
+      return updatedPlayers;
+    });
   };
 
   const addmiss = (id) => {
@@ -294,10 +285,11 @@ const Home = () => {
     }, 2000);
 
     // Ensure the animation is reset and triggered
-    setTimeout(() => {
-      reset();
-    }, 2000);
+    // setTimeout(() => {
+    //   reset();
+    // }, 2000);
   };
+
 
   return (
     <div className="relative bgImage ">
