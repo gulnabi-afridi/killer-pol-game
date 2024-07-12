@@ -41,6 +41,7 @@ const Home = () => {
     }
     return shuffledArray;
   };
+
   const sortPlayersByHits = (array) => {
     return array.slice().sort((a, b) => b.hit - a.hit);
   };
@@ -200,46 +201,37 @@ const Home = () => {
   };
 
   const addhit = (id) => {
-    setPlayers((prevPlayers) => {
-      const updatedPlayers = [...prevPlayers];
+    const updatedPlayers = [...players];
+    const playerIndex = updatedPlayers.findIndex((player) => player.id === id);
 
-      const playerIndex = updatedPlayers.findIndex(
-        (player) => player.id === id
-      );
+    if (playerIndex === -1) {
+      console.log("Player not found, returning previous players array.");
+      return;
+    }
 
-      if (playerIndex === -1) {
-        console.log("Player not found, returning previous players array.");
-        return prevPlayers;
-      }
+    // Get the removed player
+    const removedPlayer = updatedPlayers.splice(playerIndex, 1)[0];
 
-      // Get the removed player
-      const removedPlayer = updatedPlayers.splice(playerIndex, 1)[0];
-      console.log(`Removed player: ${removedPlayer.player_name}`);
+    // Update the sorted array with the removed player
+    const updatedSortedArray = [...sortedArray];
+    if (!updatedSortedArray.some((player) => player.id === removedPlayer.id)) {
+      updatedSortedArray.push(removedPlayer);
+    }
 
-      // Update the sorted array with the removed player
-      setSortArray((prevSortedArray) => {
-        // Check if the player is already in the sorted array
-        if (prevSortedArray.some((player) => player.id === removedPlayer.id)) {
-          console.log(
-            `Player ${removedPlayer.player_name} already in sorted array.`
-          );
-          return prevSortedArray;
-        }
+    setMessage(removedPlayer.player_name + " Potted");
+    setShowOverlay(true);
 
-        const updatedSortedArray = [...prevSortedArray, removedPlayer];
-        console.log("Updated sorted array: ", updatedSortedArray);
-        return sortPlayersByHits(updatedSortedArray);
-      });
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000);
 
-      setMessage(prevPlayers[playerIndex].player_name + " Potted");
-      setShowOverlay(true);
+    setPlayers(updatedPlayers);
+    setSortArray(sortPlayersByHits(updatedSortedArray));
 
-      setTimeout(() => {
-        setShowOverlay(false);
-      }, 2000);
-
-      return updatedPlayers;
-    });
+    // Call the REST function outside of the state update
+    // setTimeout(() => {
+    //   callAnimation();
+    // }, 2000);
   };
 
   const addmiss = (id) => {
@@ -285,11 +277,10 @@ const Home = () => {
     }, 2000);
 
     // Ensure the animation is reset and triggered
-    // setTimeout(() => {
-    //   reset();
-    // }, 2000);
+    setTimeout(() => {
+      reset();
+    }, 2000);
   };
-
 
   return (
     <div className="relative bgImage ">
