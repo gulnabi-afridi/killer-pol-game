@@ -224,7 +224,9 @@ const Home = () => {
 
     // Update the loot box and select the next player
     if (updatedPlayers.length > 0) {
-      
+      setTimeout(() => {
+        reset();
+      }, 2000);
     } else {
       setSelectedPlayer(null);
     }
@@ -279,9 +281,17 @@ const Home = () => {
     }, 2000);
 
     // Ensure the animation is reset and triggered
-    // setTimeout(() => {
-    //   reset();
-    // }, 2000);
+    setTimeout(() => {
+      reset();
+    }, 2000);
+  };
+
+  const isGameOver = () => {
+    const alivePlayers = sortedArray.filter((player) => player.lives > 0);
+    const deadPlayers = sortedArray.filter((player) => player.lives === 0);
+    return (
+      alivePlayers.length === 1 && deadPlayers.length === sortedArray.length - 1
+    );
   };
 
   return (
@@ -360,7 +370,7 @@ const Home = () => {
           />
         ) : (
           <div>
-            {players.length >= 1 ? (
+            {players.length >= 1 && !isGameOver() ? (
               <div className="">
                 <div className="max-w-[90%] md:max-w-[30%] mx-auto lg:mx-0 gap-3 lg:max-w-full flex lg:flex-row flex-col  itemx-center lg:justify-between justify-center">
                   {/* Rules Box */}
@@ -464,7 +474,7 @@ const Home = () => {
                         <span className="font-semibold">{firstPrice}</span>฿
                       </h1>
                     </div>
-                    <div className="bg-[#black] flex items-center gap-4 px-3 py-2 w-full md:w-[15rem]">
+                    <div className="bg-[#101f41] flex items-center gap-4 px-3 py-2 w-full md:w-[15rem]">
                       <Image
                         src="/images/second.png"
                         width={50}
@@ -492,70 +502,77 @@ const Home = () => {
                 </div>
               </div>
             ) : (
-              <div className="flex justify-center items-center flex-col">
-                <div className="lg:block hidden">
-                  <Image
-                    src="/images/logo2.svg"
-                    width={350}
-                    height={350}
-                    alt="no image"
-                  />
-                </div>
-                <h1 className="text-center font-semibold text-[30px]">
-                  Winners
-                </h1>
-                {sortedArray.slice(0, 3).map((player, index) => (
-                  <div key={index}>
-                    {index === 0 && (
-                      <div className="bg-[#00CAFF36] flex items-center gap-4 px-3 py-2 w-auto">
-                        <Image
-                          src="/images/first.png"
-                          width={50}
-                          height={50}
-                          alt="First place"
-                        />
-                        <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
-                          <span>{player.player_name}</span>
-                          <span className="font-semibold"> {firstPrice}฿</span>
-                        </h1>
-                      </div>
-                    )}
-                    {index === 1 && (
-                      <div className="bg-[#101f41] flex items-center gap-4 px-3 py-2 w-auto">
-                        <Image
-                          src="/images/second.png"
-                          width={50}
-                          height={50}
-                          alt="Second place"
-                        />
-                        <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
-                          <span>{player.player_name}</span>
-                          <span className="font-semibold">{secondPrice}฿</span>
-                        </h1>
-                      </div>
-                    )}
-                    {index === 2 && (
-                      <div className="bg-[#00CAFF36] flex items-center gap-4 px-3 py-2 w-auto">
-                        <Image
-                          src="/images/third.png"
-                          width={50}
-                          height={50}
-                          alt="Third place"
-                        />
-                        <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
-                          <span>{player.player_name}</span>
-                          <span className="font-semibold">{thirdPrice}฿</span>
-                        </h1>
-                      </div>
-                    )}
+              isGameOver() && (
+                <div className="flex justify-center items-center flex-col">
+                  <div className="lg:block hidden">
+                    <Image
+                      src="/images/logo2.svg"
+                      width={350}
+                      height={350}
+                      alt="no image"
+                    />
                   </div>
-                ))}
-              </div>
+                  <h1 className="text-center font-semibold text-[30px]">
+                    Winners
+                  </h1>
+                  {sortedArray.slice(0, 3).map((player, index) => (
+                    <div key={index}>
+                      {index === 0 && (
+                        <div className="bg-[#00CAFF36] flex items-center gap-4 px-3 py-2 w-auto">
+                          <Image
+                            src="/images/first.png"
+                            width={50}
+                            height={50}
+                            alt="First place"
+                          />
+                          <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
+                            <span>{player.player_name}</span>
+                            <span className="font-semibold">
+                              {" "}
+                              {firstPrice}฿
+                            </span>
+                          </h1>
+                        </div>
+                      )}
+                      {index === 1 && (
+                        <div className="bg-[#101f41] flex items-center gap-4 px-3 py-2 w-auto">
+                          <Image
+                            src="/images/second.png"
+                            width={50}
+                            height={50}
+                            alt="Second place"
+                          />
+                          <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
+                            <span>{player.player_name}</span>
+                            <span className="font-semibold">
+                              {secondPrice}฿
+                            </span>
+                          </h1>
+                        </div>
+                      )}
+                      {index === 2 && (
+                        <div className="bg-[#00CAFF36] flex items-center gap-4 px-3 py-2 w-auto">
+                          <Image
+                            src="/images/third.png"
+                            width={50}
+                            height={50}
+                            alt="Third place"
+                          />
+                          <h1 className="text-[25px] sm:text-[40px] flex gap-4 items-center">
+                            <span>{player.player_name}</span>
+                            <span className="font-semibold">{thirdPrice}฿</span>
+                          </h1>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )
             )}
 
             {/* Player count ----->  */}
 
-            {players.length > 0 && (
+            {players.length > 0 && !isGameOver() && (
               <div className="relative py-2">
                 <LootBox
                   players={players}
