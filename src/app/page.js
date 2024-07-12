@@ -281,14 +281,14 @@ const Home = () => {
     }, 2000);
 
     // Ensure the animation is reset and triggered
-    setTimeout(() => {
-      reset();
-    }, 2000);
+    // setTimeout(() => {
+    //   reset();
+    // }, 2000);
   };
 
   const isGameOver = () => {
-    const alivePlayers = sortedArray.filter((player) => player.lives > 0);
-    const deadPlayers = sortedArray.filter((player) => player.lives === 0);
+    const alivePlayers = sortedArray.filter((player) => player?.lives > 0);
+    const deadPlayers = sortedArray.filter((player) => player?.lives === 0);
     return (
       alivePlayers.length === 1 && deadPlayers.length === sortedArray.length - 1
     );
@@ -585,7 +585,7 @@ const Home = () => {
                 <div className="ml-4 text-[20px] font-semibold flex iems-center gap-3">
                   <h1>Players Count: </h1>
                   {
-                    sortedArray.filter((player) => player.lives !== 0).length
+                    sortedArray.filter((player) => player?.lives !== 0).length
                   } / {sortedArray.length}
                 </div>
 
@@ -620,7 +620,7 @@ const Home = () => {
                       openLootBox();
                       reset();
                     }}
-                    className="text-[26px] w-[200px] top-[110px] font-semibold h-[70px] bg-[#00CAFF36] rounded-lg absolute right-0 text-white"
+                    className="text-[26px] w-[200px] top-[220px] xl:top-[110px] font-semibold h-[70px] bg-[#00CAFF36] rounded-lg absolute right-0 text-white"
                   >
                     Next Player{" "}
                   </button>
@@ -630,60 +630,61 @@ const Home = () => {
 
             {/* USER COUNT ----------> */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div>
-                {sortedArray.length >= 1 && (
-                  <div className="px-4 overflow-y-auto scrollbar-custom">
-                    <h1 className="text-gray-500">Users</h1>
-                    {sortedArray &&
-                      sortedArray
-                        .filter((user) => user.lives > 0)
-                        .slice(0, 10)
-                        .map((myuser, index) => (
-                          <div
-                            key={myuser?.id}
-                            className={` ${
-                              index % 2
-                                ? "bg-black bg-opacity-45"
-                                : "bg-[#00CAFF36] bg-opacity-none"
-                            } px-2 py-1 rounded-md flex items-center justify-between`}
-                          >
-                            {myuser && (
-                              <div className="flex w-full items-center justify-between">
-                                <h1 className="font-semibold text-[18px]">
-                                  {myuser.player_name}
-                                </h1>
-                                <div className="flex items-center">
-                                  {[
-                                    ...Array(
-                                      Math.max(myuser.lives - myuser.black, 0)
-                                    ),
-                                  ].map((_, j) => (
-                                    <Image
-                                      key={j}
-                                      src="/images/heart.png"
-                                      width={30}
-                                      height={30}
-                                      alt="Heart"
-                                    />
-                                  ))}
-                                  {[...Array(myuser.black)].map((_, j) => (
-                                    <Image
-                                      key={j}
-                                      src="/images/eight.png"
-                                      width={30}
-                                      height={30}
-                                      alt="Heart"
-                                    />
-                                  ))}
+              {!isGameOver() && (
+                <div>
+                  {sortedArray.length >= 1 && (
+                    <div className="px-4 overflow-y-auto scrollbar-custom">
+                      <h1 className="text-gray-500">Users</h1>
+                      {sortedArray &&
+                        sortedArray
+                          .filter((user) => user.lives > 0)
+                          .slice(0, 10)
+                          .map((myuser, index) => (
+                            <div
+                              key={myuser?.id}
+                              className={` ${
+                                index % 2
+                                  ? "bg-black bg-opacity-45"
+                                  : "bg-[#00CAFF36] bg-opacity-none"
+                              } px-2 py-1 rounded-md flex items-center justify-between`}
+                            >
+                              {myuser && (
+                                <div className="flex w-full items-center justify-between">
+                                  <h1 className="font-semibold text-[18px]">
+                                    {myuser.player_name}
+                                  </h1>
+                                  <div className="flex items-center">
+                                    {[
+                                      ...Array(
+                                        Math.max(myuser.lives - myuser.black, 0)
+                                      ),
+                                    ].map((_, j) => (
+                                      <Image
+                                        key={j}
+                                        src="/images/heart.png"
+                                        width={30}
+                                        height={30}
+                                        alt="Heart"
+                                      />
+                                    ))}
+                                    {[...Array(myuser.black)].map((_, j) => (
+                                      <Image
+                                        key={j}
+                                        src="/images/eight.png"
+                                        width={30}
+                                        height={30}
+                                        alt="Heart"
+                                      />
+                                    ))}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                  </div>
-                )}
-              </div>
-
+                              )}
+                            </div>
+                          ))}
+                    </div>
+                  )}
+                </div>
+              )}
               {sortedArray.length > 10 && (
                 <div className=" px-4 overflow-y-auto scrollbar-custom">
                   <h1 className="text-gray-500">Users</h1>
